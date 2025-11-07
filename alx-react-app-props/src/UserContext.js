@@ -1,7 +1,6 @@
-import { createContext } from 'react';
+xt.jsnano src/UserContext.js
+$ nano src/UserContext.jsimport { createContext } from 'react';
 
-// Create a Context for the user data
-const UserContext = createContext(null);
+const UserContext = createContext();
 
-// Export the context so it can be imported in other files
 export default UserContext;
