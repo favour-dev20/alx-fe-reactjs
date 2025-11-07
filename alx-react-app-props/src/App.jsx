@@ -7,7 +7,7 @@ function App() {
 
   return (
     <UserContext.Provider value={userData}>
-      <ProfilePage userData={userData} />  {/* You can remove prop if you refactor */}
+      <ProfilePage />
     </UserContext.Provider>
   );
 }
