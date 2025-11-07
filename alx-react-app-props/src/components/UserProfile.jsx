@@ -5,11 +5,14 @@ import UserContext from '../UserContext';
 function UserProfile() {
   const user = useContext(UserContext);
 
+  if (!user) {
+    return <div>No user data available.</div>;
+  }
+
   return (
-    <div className="user-profile">
+    <div>
       <h2>{user.name}</h2>
-      <p>Age: {user.age}</p>
-      <p>Bio: {user.bio}</p>
+      <p>Email: {user.email}</p>
     </div>
   );
 }
