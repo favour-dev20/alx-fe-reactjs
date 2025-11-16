@@ -2,24 +2,22 @@
 import { create } from "zustand";
 
 const useRecipeStore = create((set, get) => ({
-  // Task 0 & 1 core
+  // --- Task 0 & 1 ---
   recipes: [],
   addRecipe: (newRecipe) =>
     set((state) => {
-      const nextRecipes = [...state.recipes, newRecipe];
-      // keep filteredRecipes in sync
-      const nextFiltered = state.filteredRecipes && state.filteredRecipes.length
-        ? [...state.filteredRecipes, newRecipe]
-        : nextRecipes.slice();
-      set({ filteredRecipes: nextFiltered });
-      return { recipes: nextRecipes };
+      const next = { recipes: [...state.recipes, newRecipe] };
+      set({ filteredRecipes: (state.filteredRecipes.length ? [...state.filteredRecipes, newRecipe] : undefined) });
+      return next;
     }),
   setRecipes: (recipes) => {
     set({ recipes, filteredRecipes: recipes.slice() });
   },
   updateRecipe: (id, updatedData) =>
     set((state) => {
-      const updated = state.recipes.map((r) => (r.id === id ? { ...r, ...updatedData } : r));
+      const updated = state.recipes.map((r) =>
+        r.id === id ? { ...r, ...updatedData } : r
+      );
       return { recipes: updated, filteredRecipes: updated.slice() };
     }),
   deleteRecipe: (id) =>
@@ -28,13 +26,12 @@ const useRecipeStore = create((set, get) => ({
       return { recipes: remaining, filteredRecipes: remaining.slice() };
     }),
 
-  // Task 2: search & filter
+  // --- Task 2: search & filter ---
   searchTerm: "",
   setSearchTerm: (term) => {
     set({ searchTerm: term });
     get().filterRecipes(term);
   },
-
   filteredRecipes: [],
   filterRecipes: (term = "") => {
     const search = (term || get().searchTerm || "").toString().trim().toLowerCase();
@@ -53,11 +50,29 @@ const useRecipeStore = create((set, get) => ({
     });
     set({ filteredRecipes: filtered });
   },
-
-  // helper to initialize filteredRecipes on mount
   initFilter: () => {
     const all = get().recipes || [];
     set({ filteredRecipes: all.slice() });
+  },
+
+  // --- Task 3: Favorites & Recommendations ---
+  favorites: [],
+  addFavorite: (id) => {
+    if (!get().favorites.includes(id)) {
+      set({ favorites: [...get().favorites, id] });
+      get().generateRecommendations();
+    }
+  },
+  removeFavorite: (id) => {
+    set({ favorites: get().favorites.filter(f => f !== id) });
+    get().generateRecommendations();
+  },
+  recommendations: [],
+  generateRecommendations: () => {
+    const rec = get().recipes.filter(
+      (r) => get().favorites.includes(r.id) && Math.random() > 0.5
+    );
+    set({ recommendations: rec });
   },
 }));
 
