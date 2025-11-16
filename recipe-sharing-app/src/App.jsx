@@ -1,20 +1,22 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import RecipeList from "./components/RecipeList";
-import AddRecipeForm from "./components/AddRecipeForm";
-import RecipeDetails from "./components/RecipeDetails";
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import RecipeList from './components/RecipeList'
+import AddRecipeForm from './components/AddRecipeForm'
+import RecipeDetails from './components/RecipeDetails'
+import EditRecipeForm from './components/EditRecipeForm'
 
 function App() {
   return (
-    <div style={{ maxWidth: 600, margin: "24px auto", padding: "0 16px" }}>
-      <h1 style={{ textAlign: "center" }}>Recipe Sharing App</h1>
+    <div style={{ maxWidth: 600, margin: '24px auto', padding: '0 16px' }}>
+      <h1 style={{ textAlign: 'center' }}>Recipe Sharing App</h1>
       <AddRecipeForm />
       <Routes>
         <Route path="/" element={<RecipeList />} />
         <Route path="/recipe/:id" element={<RecipeDetails />} />
+        <Route path="/edit/:id" element={<EditRecipeForm />} />
       </Routes>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

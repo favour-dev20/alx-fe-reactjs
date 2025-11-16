@@ -1,30 +1,25 @@
-import { useRecipeStore } from "./recipeStore";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
+import { useRecipeStore } from './recipeStore'
 
-function RecipeList() {
-  const recipes = useRecipeStore((state) => state.recipes);
-  const filteredRecipes = useRecipeStore((state) => state.filteredRecipes);
+const RecipeList = () => {
+  const recipes = useRecipeStore((state) => state.recipes)
 
-  // Show filteredRecipes if not empty, else show all recipes
-  const listToRender = filteredRecipes.length ? filteredRecipes : recipes;
-
-  if (!listToRender.length) return <p>No recipes yet — add one!</p>;
+  if (!recipes.length) return <p>No recipes yet — add one!</p>
 
   return (
     <div>
-      {listToRender.map((recipe) => (
-        <div
-          key={recipe.id}
-          style={{ border: "1px solid #ddd", padding: "8px", margin: "8px 0" }}
-        >
-          <Link to={`/recipe/${recipe.id}`} style={{ textDecoration: "none" }}>
-            <h3>{recipe.title}</h3>
-          </Link>
+      {recipes.map((recipe) => (
+        <div key={recipe.id} style={{ borderBottom: '1px solid #ccc', padding: '8px 0' }}>
+          <h3>{recipe.title}</h3>
           <p>{recipe.description}</p>
+          <Link to={`/recipe/${recipe.id}`} style={{ marginRight: '8px' }}>
+            View
+          </Link>
+          <Link to={`/edit/${recipe.id}`}>Edit</Link>
         </div>
       ))}
     </div>
-  );
+  )
 }
 
-export default RecipeList;
+export default RecipeList
