@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchUserData } from "../services/githubService";
+import { fetchSingleUser, fetchUserData } from "../services/githubService";
 
 const Search = () => {
   const [username, setUsername] = useState("");
@@ -18,12 +18,24 @@ const Search = () => {
     setUserData([]);
 
     try {
-      const data = await fetchUserData(username, location, minRepos);
-      // normalize single object to array for Task 0/1 compatibility
-      const results = Array.isArray(data) ? data : [data];
-      setUserData(results);
+      let results = [];
+
+      // If filters are applied, use advanced search
+      if (location || minRepos) {
+        results = await fetchUserData(username, location, minRepos);
+      } else {
+        // Task 1: fetch single user
+        const user = await fetchSingleUser(username);
+        results = [user]; // normalize single object to array
+      }
+
+      if (results.length === 0) {
+        setError("Looks like we cant find the user");
+      } else {
+        setUserData(results);
+      }
     } catch (err) {
-      setError(err.message || "Looks like we cant find any users");
+      setError(err.message || "Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
