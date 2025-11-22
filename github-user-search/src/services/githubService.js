@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API_BASE = "https://api.github.com";
 
-export const fetchGithubUser = async (username) => {
+export const fetchUserData = async (username) => {
   if (!username) throw new Error("username required");
 
   const GITHUB_API_KEY = import.meta.env.VITE_APP_GITHUB_API_KEY;

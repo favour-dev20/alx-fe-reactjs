@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SearchBar from "./components/SearchBar";
 import UserCard from "./components/UserCard";
-import { fetchGithubUser } from "./services/githubService"; // ensure filename matches
+import { fetchUserData } from "./services/githubService"; // ensure filename matches
 
 function App() {
   const [user, setUser] = useState(null);
