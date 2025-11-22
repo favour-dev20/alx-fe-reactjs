@@ -18,7 +18,7 @@ function App() {
       const data = await fetchGithubUser(username);
       setUser(data);
     } catch (err) {
-      setError(err.message || "Looks like we can't find the user");
+      setError(err.message || "Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
