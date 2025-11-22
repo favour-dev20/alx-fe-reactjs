@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { fetchUserData } from "../services/githubService"; // updated import
+import { fetchUserData } from "../services/githubService";
 
 const Search = () => {
   const [username, setUsername] = useState("");
-  const [userData, setUserData] = useState(null);
+  const [location, setLocation] = useState("");
+  const [minRepos, setMinRepos] = useState("");
+  const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -13,52 +15,95 @@ const Search = () => {
 
     setLoading(true);
     setError("");
-    setUserData(null);
+    setUserData([]);
 
     try {
-      const data = await fetchUserData(username); // updated function name
-      setUserData(data);
+      const data = await fetchUserData(username, location, minRepos);
+      // normalize single object to array for Task 0/1 compatibility
+      const results = Array.isArray(data) ? data : [data];
+      setUserData(results);
     } catch (err) {
-      setError(err.message || "Looks like we cant find the user");
+      setError(err.message || "Looks like we cant find any users");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} style={{ marginBottom: "16px" }}>
+    <div className="max-w-3xl mx-auto p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-wrap gap-2 mb-4"
+      >
         <input
           type="text"
-          placeholder="Enter GitHub username (e.g. octocat)"
+          placeholder="GitHub username (required)"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={{ padding: "8px", width: "250px" }}
+          className="p-2 border rounded flex-1 min-w-[150px]"
         />
-        <button type="submit" style={{ padding: "8px 12px", marginLeft: "8px" }}>
+        <input
+          type="text"
+          placeholder="Location (optional)"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="p-2 border rounded flex-1 min-w-[120px]"
+        />
+        <input
+          type="number"
+          placeholder="Min repos (optional)"
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
+          className="p-2 border rounded w-32"
+        />
+        <button
+          type="submit"
+          className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
           Search
         </button>
       </form>
 
-      <div style={{ marginTop: "16px" }}>
-        {loading && <p>Loading...</p>}
-        {error && <p style={{ color: "crimson" }}>{error}</p>}
-        {userData && (
-          <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-            <img src={userData.avatar_url} alt={userData.login} width="100" style={{ borderRadius: "8px" }} />
-            <div>
-              <h3>{userData.name || userData.login}</h3>
-              <p>{userData.bio}</p>
-              <p>
-                Followers: {userData.followers} • Following: {userData.following}
-              </p>
-              <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
-                View GitHub Profile
-              </a>
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-600">{error}</p>}
+
+      {userData.length > 0 && (
+        <div className="grid gap-4">
+          {userData.map((user) => (
+            <div
+              key={user.id}
+              className="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-4 border rounded"
+            >
+              <img
+                src={user.avatar_url}
+                alt={user.login}
+                className="w-20 h-20 rounded"
+              />
+              <div>
+                <h3 className="font-semibold text-lg">{user.name || user.login}</h3>
+                {user.bio && <p className="text-gray-700">{user.bio}</p>}
+                <p>
+                  Followers: {user.followers || 0} • Following: {user.following || 0}
+                </p>
+                {user.location && <p>Location: {user.location}</p>}
+                <p>Repos: {user.public_repos || 0}</p>
+                <a
+                  href={user.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  View Profile
+                </a>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {!loading && !error && userData.length === 0 && (
+        <p className="text-gray-500">Search for a GitHub username above.</p>
+      )}
     </div>
   );
 };
