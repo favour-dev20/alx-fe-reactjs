@@ -1,15 +1,22 @@
 // src/components/RecipeDetail.jsx
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import recipesData from "../data.json";
 
 export default function RecipeDetail() {
   const { id } = useParams();
-  const recipe = recipesData.find((r) => String(r.id) === String(id));
+  const [recipe, setRecipe] = useState(null);
+
+  // useEffect is used to load the recipe when component mounts or id changes
+  useEffect(() => {
+    const found = recipesData.find((r) => String(r.id) === String(id));
+    setRecipe(found || null);
+  }, [id]);
 
   if (!recipe) {
     return (
       <div className="max-w-4xl mx-auto p-6">
-        <p className="text-red-600">Recipe not found.</p>
+        <p className="text-red-600 mb-4">Recipe not found.</p>
         <Link to="/" className="text-blue-500 underline">Back to Home</Link>
       </div>
     );
@@ -27,6 +34,7 @@ export default function RecipeDetail() {
           <h2 className="text-2xl font-bold mb-2">{recipe.title}</h2>
           <p className="text-gray-700 mb-4">{recipe.summary}</p>
 
+          {/* Ingredients section */}
           <section className="mb-6">
             <h3 className="text-xl font-semibold mb-2">Ingredients</h3>
             <ul className="list-disc list-inside text-gray-700">
@@ -38,6 +46,7 @@ export default function RecipeDetail() {
             </ul>
           </section>
 
+          {/* Instructions / cooking steps */}
           <section className="mb-6">
             <h3 className="text-xl font-semibold mb-2">Instructions</h3>
             <ol className="list-decimal list-inside text-gray-700 space-y-2">
