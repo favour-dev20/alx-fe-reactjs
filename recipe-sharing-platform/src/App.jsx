@@ -1,19 +1,25 @@
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
+import RecipeDetail from "./components/RecipeDetail";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero / Test header (keeps Task 0 verification intact) */}
-      <header className="flex items-center justify-center py-12 bg-white border-b">
-        <h1 className="text-3xl font-bold text-blue-600">
-          Recipe Sharing Platform — Tailwind OK ✅
-        </h1>
-      </header>
+    <Router>
+      <div className="min-h-screen bg-gray-50">
+        <header className="flex items-center justify-center py-6 bg-white border-b">
+          <h1 className="text-3xl font-bold text-blue-600">
+            Recipe Sharing Platform — Tailwind OK ✅
+          </h1>
+        </header>
 
-      {/* Main content: home page with recipe grid (Task 1) */}
-      <main className="py-8">
-        <HomePage />
-      </main>
-    </div>
+        <main className="py-8">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/recipe/:id" element={<RecipeDetail />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
