@@ -1,7 +1,6 @@
-// tailwind.config.js
 module.exports = {
-  content: ["./public/index.html", "./src//*.{js,jsx,ts,tsx}"],
-  darkMode: false, // or 'media' / 'class'
+  content: ['./src//*.{js,jsx,ts,tsx}', './public/index.html'],
+  darkMode: false, // You can set it to 'media' or 'class' if needed
   theme: {
     extend: {},
   },
