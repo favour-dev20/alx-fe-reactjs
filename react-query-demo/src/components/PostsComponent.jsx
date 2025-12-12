@@ -15,7 +15,7 @@ export default function PostsComponent() {
       <p className="text-center text-lg mt-8 text-gray-600">Loading posts...</p>
     );
 
-  if (error)
+  if (isError)
     return (
       <p className="text-center text-lg mt-8 text-red-500">
         Oops! Something went wrong while fetching posts.
