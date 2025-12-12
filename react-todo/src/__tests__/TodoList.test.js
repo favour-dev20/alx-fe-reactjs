@@ -1,4 +1,5 @@
 // src/_tests_/TodoList.test.js
+import React from "react"; // <-- ADD THIS LINE
 import { render, screen, fireEvent } from "@testing-library/react";
 import TodoList from "../components/TodoList";
 
