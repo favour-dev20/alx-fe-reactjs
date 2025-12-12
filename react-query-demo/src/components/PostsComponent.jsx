@@ -8,7 +8,12 @@ function fetchPosts() {
 }
 
 export default function PostsComponent() {
-  const { data, isLoading, error, refetch } = useQuery("posts", fetchPosts);
+  const { data, isLoading, error, refetch } = useQuery("posts", fetchPosts, {
+    cacheTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60,     // 1 minute
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
+  });
 
   if (isLoading)
     return (
