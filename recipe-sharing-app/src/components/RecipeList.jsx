@@ -33,11 +33,11 @@ const RecipeList = () => {
           <h3>{recipe.title}</h3>
           <p>{recipe.description}</p>
 
-          <Link to={/recipe/${recipe.id}} style={{ marginRight: "8px" }}>
+          <Link to={`/recipe/${recipe.id}`} style={{ marginRight: "8px" }}>
             View
           </Link>
 
-          <Link to={/edit/${recipe.id}}>
+          <Link to={`/edit/${recipe.id}`}>
             Edit
           </Link>
         </div>

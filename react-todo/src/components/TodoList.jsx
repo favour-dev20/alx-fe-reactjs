@@ -1,21 +1,29 @@
-// src/components/TodoList.jsx
-import { useState } from "react";
-import AddTodoForm from "./AddTodoForm";
+import React, { useState } from "react";
 
-export default function TodoList() {
+const TodoList = () => {
   const [todos, setTodos] = useState([
     { id: 1, text: "Learn React", completed: false },
     { id: 2, text: "Build a Todo App", completed: false },
   ]);
 
-  const addTodo = (text) => {
-    setTodos([...todos, { id: Date.now(), text, completed: false }]);
+  const [input, setInput] = useState("");
+
+  const addTodo = () => {
+    if (input.trim() === "") return;
+
+    setTodos([
+      ...todos,
+      { id: Date.now(), text: input, completed: false },
+    ]);
+    setInput("");
   };
 
   const toggleTodo = (id) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        todo.id === id
+          ? { ...todo, completed: !todo.completed }
+          : todo
       )
     );
   };
@@ -25,31 +33,32 @@ export default function TodoList() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-gray-50 rounded-md shadow">
-      <h1 className="text-2xl font-bold mb-4">Todo List</h1>
-      <AddTodoForm addTodo={addTodo} />
-      <ul className="mt-4 space-y-2">
+    <div>
+      <h1>Todo List</h1>
+
+      <input
+        placeholder="Add a new todo"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={addTodo}>Add</button>
+
+      <ul>
         {todos.map((todo) => (
           <li
             key={todo.id}
             onClick={() => toggleTodo(todo.id)}
-            className={`p-2 border rounded cursor-pointer ${
-              todo.completed ? "line-through bg-green-100" : "bg-white"
-            }`}
+            style={{
+              textDecoration: todo.completed ? "line-through" : "none",
+            }}
           >
             {todo.text}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteTodo(todo.id);
-              }}
-              className="ml-2 text-red-500 font-bold"
-            >
-              X
-            </button>
+            <button onClick={() => deleteTodo(todo.id)}>X</button>
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
+
+export default TodoList;
